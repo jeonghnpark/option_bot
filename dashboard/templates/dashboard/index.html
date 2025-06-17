@@ -1,0 +1,213 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+<div class="dashboard"></div>
+<div class="status-cards">
+
+    <div class="card">
+        <div class="status-indicator">
+            <div id="portfoliomonitor-container" class="status-item">
+                <div class="status-row">
+                    <div class="status-left">
+                        <span id="portfolio-monitor-circle" class="status-circle status-inactive"></span>
+                        <span id="portfolio-monitor-status-text">포트폴리오 모니터: 비활성화</span>
+                    </div>
+                    <!-- <label class="switch">
+                        <input type="checkbox" id="portfoliomonitor-switch">
+                        <span class="slider round"></span>
+                    </label> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="status-indicator">
+
+
+            <div id="auto-liquidation-container" class="status-item">
+                <div class="status-row">
+                    <div class="status-left">
+                        <span id="auto-liquidation-circle" class="status-circle status-inactive"></span>
+                        <span id="auto-liquidation-status-text">자동청산: 비활성화</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="status-indicator">
+            <div id="buydip-container" class="status-item">
+                <div class="status-row">
+                    <div class="status-left">
+                        <span id="buydip-circle" class="status-circle status-inactive"></span>
+                        <span id="buydip-status-text">매수딥: 비활성화</span>
+                    </div>
+                    <!-- <label class="switch">
+                        <input type="checkbox" id="buydip-switch">
+                        <span class="slider round"></span>
+                    </label> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="status-indicator">
+            <div id="selldip-container" class="status-item">
+                <div class="status-row">
+                    <div class="status-left">
+                        <span id="selldip-circle" class="status-circle status-inactive"></span>
+                        <span id="selldip-status-text">매도딥: 비활성화</span>
+                    </div>
+                    <!-- <label class="switch">
+                        <input type="checkbox" id="selldip-switch">
+                        <span class="slider round"></span>
+                    </label> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="status-indicator">
+            <div id="buypeak-container" class="status-item">
+                <div class="status-row">
+                    <div class="status-left">
+                        <span id="buypeak-circle" class="status-circle status-inactive"></span>
+                        <span id="buypeak-status-text">매수피크: 비활성화</span>
+                    </div>
+                    <!-- <label class="switch">
+                        <input type="checkbox" id="buypeak-switch">
+                        <span class="slider round"></span>
+                    </label> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="status-indicator">
+            <div id="sellpeak-container" class="status-item">
+                <div class="status-row">
+                    <div class="status-left">
+                        <span id="sellpeak-circle" class="status-circle status-inactive"></span>
+                        <span id="sellpeak-status-text">매도피크: 비활성화</span>
+                    </div>
+                    <!-- <label class="switch">
+                        <input type="checkbox" id="sellpeak-switch">
+                        <span class="slider round"></span>
+                    </label> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/server_status.js' %}?v=238"></script>
+{% endblock %}
+
+{% block css %}
+<style>
+    /* 기존 스타일 유지 */
+    .status-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .status-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* 스위치 스타일 */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+    }
+
+    input:checked+.slider {
+        background-color: #4CAF50;
+    }
+
+    input:checked+.slider:before {
+        transform: translateX(26px);
+    }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        margin-right: 15px;
+    }
+
+    .status-circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .status-active {
+        background-color: #4CAF50;
+    }
+
+    .status-inactive {
+        background-color: #f44336;
+    }
+</style>
+{% endblock %}

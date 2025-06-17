@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title%}simple trading{%endblock%}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block css %}{% endblock%}
+</head>
+
+<body>
+    <nav>
+        <a href="http://127.0.0.1:8000/admin" target="_blank">admin</a>
+        <a href="{% url 'dashboard:index' %}">Home</a>
+        <a href="{% url 'trading:index' %}" target="_blank">Implied Volatility</a>
+        <a href="{% url 'order:index' %}" target="_blank">Order</a>
+        <a href="{% url 'order:portfolio_list' %}" target='_blank'>Portfolios</a>
+        <a href="{% url 'trading:futures_price' %}" target="_blank">Futures Price</a>
+    </nav>
+
+    {% block content %}{% endblock %}
+    {% block js %}{% endblock %}
+</body>
+
+</html>

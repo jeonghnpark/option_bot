@@ -1,0 +1,42 @@
+<!-- order/templates/order/portfolio_detail.html -->
+
+{% extends 'layout.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'order/css/styles.css'%}">
+{% endblock%}
+{% block content %}
+<h5>Portfolio Detail: {{ portfolio.portfolio_id }}</h5>
+<p>Timestamp: {{ portfolio.timestamp }}</p>
+<p>Status: {{ portfolio.status }}</p>
+
+<h5>Trades</h5>
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Future Code</th>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>Direction</th>
+            <th>TimeStamp</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trade in trades %}
+        <tr>
+            <td>{{ trade.order_id }}</td>
+            <td>{{ trade.focode }}</td>
+            <td>{{ trade.price }}</td>
+            <td>{{ trade.volume }}</td>
+            <td>{{ trade.direction }}</td>
+            <td> {{ trade.timestamp|date:"Y-m-d" }}
+                {{ trade.timestamp|date:"H:i:s" }}{{ trade.timestamp|date:"u"|slice:":0" }}</td>
+            <td>{{ trade.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

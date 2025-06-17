@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title%}
+Portfolio List
+{%endblock%}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'order/css/styles.css'%}">
+{% endblock%}
+
+{% block content %}
+<h5>Portfolio list</h5>
+
+<button id="view-portfolios-once">포트폴리오 조회</button>
+<br />
+<button id='start-fetch'>포트폴리오 연속조회</button>
+
+<br />
+<br />
+<button id="start-stream-portfolios">start stream portfolios</button>
+<br />
+
+
+<br />
+<div id="total-pnl-summary">
+
+    <span id="total-pnl-today">0</span>
+</div>
+
+
+<div id="strategy-pnl-summary">
+
+    <ul id="strategy-pnl-list"></ul>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Portfolio ID</th>
+            <th>Timestamp</th>
+            <th>Trades</th>
+            <th>Status</th>
+            <th>P&L</th>
+            <th>Action</th>
+            <th>수익목표</th>
+            <th>전략</th>
+            <th>Description</th>
+            <th>청산조건</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for portfolio in portfolios %}
+        <tr>
+            <td>{{ portfolio.portfolio_id }}</td>
+            <td>
+                {{ portfolio.timestamp|date:"Y. m. d." }}
+                {% if portfolio.timestamp.hour < 12 %}오전{% else %}오후{% endif %} {{ portfolio.timestamp|date:"g:i:s" }}
+                    </td>
+            <td>
+                <a href="#"
+                    onclick="openCenteredWindow(`{% url 'order:portfolio_detail' portfolio.portfolio_id %}`); return false;">
+                    View Details
+                </a>
+            </td>
+
+
+
+            <td>{{ portfolio.status }}</td>
+            <td>{{ portfolio.pnl | floatformat:"0" |intcomma}}</td>
+            <td>
+                <a href="#" class="liquidate-link" data-portfolio-id="{{portfolio.portfolio_id}}">바로청산</a>
+            </td>
+            <td>{{ portfolio.target_profit}}</td>
+            <td>{{ portfolio.strategy}}</td>
+            <td>{{ portfolio.description}}</td>
+            <td>{{ portfolio.liquidation_condition}}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No portfolios found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'order/js/portfolio.js' %}?v=140"></script>
+<script>
+    function openCenteredWindow(url) {
+        const width = 800;
+        const height = 600;
+        const left = (screen.width / 2) - (width / 2);
+        const top = (screen.height / 2) - (height / 2);
+
+        window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top}`);
+    }
+</script>
+
+{% endblock %}

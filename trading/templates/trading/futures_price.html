@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h5>선물 가격 정보</h5>
+<button id="startCollection">호가 수집 시작</button>
+<button id="stopCollection">호가 수집 중지</button>
+<p id="collectionStatus">수집 상태: 중지됨</p>
+<div id="priceInfo"></div>
+<div id="orderbookInfo"></div>
+
+<script>
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/futures/101VC000/');
+    console.log("socket:", socket);
+    socket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log("data:", data);
+        if (data.type === 'price_update') {
+            document.getElementById('priceInfo').innerHTML = `가격: ${data.data.body.price} 호가:${data.data.body.bidho1}/${data.data.body.offerho1}, 거래량: ${data.data.body.cvolume}, 체결시간: ${data.data.body.chetime}`;
+        } else if (data.type === 'orderbook_update') {
+            document.getElementById('orderbookInfo').innerHTML = `매수1호가: ${data.data.body.bidho1}, 매도1호가: ${data.data.body.offerho1}`;
+        }
+    };
+
+    document.getElementById('startCollection').onclick = function () {
+        fetch('/trading/start_collection/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('collectionStatus').innerHTML = '수집 상태: 수집 중';
+            });
+    };
+
+    document.getElementById('stopCollection').onclick = function () {
+        fetch('/trading/stop_collection/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("collectionStatus").innerHTML =
+                    "수집 상태: 중지됨";
+            });
+    };
+</script>
+{% endblock %}

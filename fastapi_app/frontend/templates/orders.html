@@ -1,0 +1,36 @@
+<!-- fastapi_app/frontend/templates/orders.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>주문 시스템</title>
+</head>
+
+<body>
+    <h1>선물 주문</h1>
+    <form id="orderForm">
+        <div>
+            <label for="focode">종목코드:</label>
+            <input type="text" id="focode" required>
+        </div>
+        <div>
+            <label for="direction">매수/매도:</label>
+            <select id="direction" required>
+                <option value="buy">매수</option>
+                <option value="sell">매도</option>
+            </select>
+        </div>
+        <div>
+            <label for="price">가격:</label>
+            <input type="number" id="price" required>
+        </div>
+        <div>
+            <label for="quantity">수량:</label>
+            <input type="number" id="quantity" required>
+        </div>
+        <button type="submit">주문하기</button>
+    </form>
+    <script src="{{ url_for('static', path='js/orders.js') }}"></script>
+</body>
+
+</html>

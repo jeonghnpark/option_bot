@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1;
+    margin: 0;
+    padding: 7.5px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #333;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: #333;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+thead {
+    background-color: #bbb;
+    color: white;
+}
+
+
+th,
+td {
+    padding: 7.5px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+thead:hover,
+th:hover {
+    background-color: #bbb;
+    /* 원래 배경색 유지 */
+    color: white;
+    /* 원래 글자색 유지 */
+}
+
+thead:hover th {
+    background-color: #bbb;
+    /* 유지 */
+    color: white;
+    /* 유지 */
+}
+
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.empty-message {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+}
+
+input {
+    width: 65px !important;
+}

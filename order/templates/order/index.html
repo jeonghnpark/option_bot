@@ -1,0 +1,348 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title%}
+Order
+{%endblock%}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'order/css/styles.css'%}"><!-- TODO url패턴을 활용할것 -->
+{% endblock%}
+
+{% block content %}
+{% csrf_token %}
+
+<br />
+<button id="init_button">select Mini futures</button><br /><br />
+<label for="fut_code_select">Futures Month </label>
+<select id="fut_code_select"></select>
+<label for="maturity">Maturity:</label>
+<input type="text" id="maturity" name="maturity" value="" />
+<label for="fut_code">Futures Code </label>
+<input type="text" id="fut_code" name="fut_code" value="" /><br /><br />
+
+<button id="price_button">Current Price</button>
+<label for="orderbook_display_bid">Bid</label>
+<input type="text" id="orderbook_display_bid" name="orderbook_display_bid" />
+<label for="orderbook_display_ask">Ask</label>
+<input type="text" id="orderbook_display_ask" name="orderbook_display_ask" />
+
+<br /><br />
+<h4>single order</h4>
+<label for="focode">상품코드: </label>
+<input id="focode" name="focode" />
+<label for="quantity">수량: </label>
+<input type="number" id="quantity" name="quantity" min="1" value="1" style="width: 50px; text-align: left;" />
+<label for="direction">매수/매도:</label>
+<select name="direction" id="direction">
+    <option value="buy">Buy</option>
+    <option value="sell">Sell</option>
+</select>
+<label for="order_type">주문타입</label>
+<select name="order_type" id="order_type">
+    <option value="limit">지정가</option>
+    <option value="market" selected>시장가</option>
+    <option value="limitbest">최우선1호가</option>
+</select>
+<label for="order_price">주문가: </label>
+<input type="number" id="order_price" name="order_price" style="width: 50px; text-align: left;" />
+
+<label for="liquidation_condition">청산 조건:</label>
+<select name="liquidation_condition" id="liquidation_condition">
+    <option value="null" selected>없음</option>
+    <option value="pl">손익</option>
+    <option value="time">시간</option>
+</select>
+<label for="liquidation_value" id="liquidation_value_label">조건값:</label>
+<input type="number" id="liquidation_value" name="liquidation_value" style="width: 70px; text-align: left;" />
+<span id="liquidation_unit"></span>
+
+<button id="multi_order_button_for_single_order">Place Order</button>
+
+<div id="order_result"></div>
+<br />
+
+<h4>Multi order</h4>
+
+<button id="multi_order_button">Order All</button>
+<br /><br />
+<div id="order_list">
+    <div class="order_item">
+        <label for="focode_1">상품코드: </label>
+        <input id="focode_1" name="focode_1" />
+        <label for="quantity_1">수량: </label>
+        <input type="number" id="quantity_1" name="quantity_1" min="1" value="1"
+            style="width:50px; text-align:right;" />
+        <label for="direction_1">매수/매도:</label>
+        <select name="direction_1" id="direction_1">
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+        </select>
+        <label for="order_type_1">주문타입</label>
+        <select name="order_type_1" id="order_type_1">
+            <option value="limit">지정가</option>
+            <option value="market" selected>시장가</option>
+            <option value="limitbest">최우선1호가</option>
+        </select>
+        <label for="order_price_1">주문가: </label>
+        <input type="number" id="order_price_1" name="order_price_1" />
+    </div>
+
+    <div class="order_item">
+        <label for="focode_2">상품코드: </label>
+        <input id="focode_2" name="focode_2" />
+        <label for="quantity_2">수량: </label>
+        <input type="number" id="quantity_2" name="quantity_2" min="1" value="1"
+            style="width:50px; text-align:right;" />
+        <label for="direction_2">매수/매도:</label>
+        <select name="direction_2" id="direction_2">
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+        </select>
+        <label for="order_type_2">주문타입</label>
+        <select name="order_type_2" id="order_type_2">
+            <option value="limit">지정가</option>
+            <option value="market" selected>시장가</option>
+            <option value="limitbest">최우선1호가</option>
+        </select>
+        <label for="order_price_2">주문가: </label>
+        <input type="number" id="order_price_2" name="order_price_2" />
+    </div>
+    <div class="order_item">
+        <label for="focode_3">상품코드: </label>
+        <input id="focode_3" name="focode_3" />
+        <label for="quantity_3">수량: </label>
+        <input type="number" id="quantity_3" name="quantity_3" min="1" value="1"
+            style="width:50px; text-align:right;" />
+        <label for="direction_3">매수/매도:</label>
+        <select name="direction_3" id="direction_3">
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+        </select>
+        <label for="order_type_3">주문타입</label>
+        <select name="order_type_3" id="order_type_3">
+            <option value="limit">지정가</option>
+            <option value="market" selected>시장가</option>
+            <option value="limitbest">최우선1호가</option>
+        </select>
+        <label for="order_price_3">주문가: </label>
+        <input type="number" id="order_price_3" name="order_price_3" />
+    </div>
+
+</div>
+
+<div id="multi_order_result"></div>
+<h4>Auto liquidation</h4>
+<button id="auto_liquidation">Auto liquidation</button>
+<button id="start_auto_liquidation">start Auto Liquidate</button>
+<br />
+<h4>Vol strategy order</h4>
+
+<button id="set_vol_threshold">set vol threshold</button>
+<label for="cd_rate">CD Rate:</label>
+<input type="text" id="cd_rate" name="cd_rate" style="width: 50px; text-align: right;" />
+<label for="cd_rate">%</label>
+<label for="theta_vega_ratio">theta/vega ratio:</label>
+<input type="text" id="theta_vega_ratio" name="theta_vega_ratio" value="" style="width: 50px; text-align: right;" />
+<label for="theta_vega_ratio">% X </label>
+<input type="text" id="vol_strategy_threshold_multiplier" name="vol_strategy_threshold_multiplier" value="0.5"
+    style="width: 50px; text-align: right;" />
+<label for="vol_strategy_threshold">=</label>
+<input type="text" id="vol_strategy_threshold" name="vol_strategy_threshold" value=""
+    style="width: 50px; text-align: right;" />
+<label for="vol_strategy_threshold">%</label>
+<br />
+<br />
+<button id="run-vol-strategy">run vol strategy</button>
+<br />
+<br />
+<button id="start_strategy_sellvol">start sell vol strategy</button>
+<br />
+<div id="auto_order_result"></div>
+<br />
+
+<h4>Buy the dip strategy!!!</h4>
+<button id="run_buydip">Run BuyDip Strategy</button>
+
+<div class="buydip-controls"></div>
+<label for="shcode">Shcode:: </label>
+<input type="text" id="shcode" name="shcode" value="105V9000" />
+
+<label for="period">Lookback-period(min): </label>
+<input type="number" id="period" name="period" value="5" style="width: 50px; text-align: right;" />
+
+
+<label for="liquidation_delay">Liquidation Delay(min): </label>
+<input type="number" id="liquidation_delay" name="liquidation_delay" value="5"
+    style="width: 50px; text-align: right;" />
+
+<label for="buydip_threshold">buythedip-threshold: </label>
+<input type="number" id="buydip_threshold" name="buydip_threshold" value="15" style="width: 50px; text-align: right;" />
+<label for="buydip_threshold">%</label>
+
+<label for="monitoring_duration">Monitoring duration(sec):</label>
+<input type="number" id="monitoring_duration" name="monitoring_duration" value="40"
+    style="width: 50px; text-align: right;" />
+
+<label for="interval_buydip">Interval (min): </label>
+<input type="number" id="interval_buydip" name="interval_buydip" value="1" style="width: 50px; text-align: right;" />
+
+<button id="run_buydip_continuously">Start BuyDip!!</button>
+</div>
+
+
+<div class="strategies-grid">
+    <div class="strategy-variables">
+        <h4>전략변수</h4>
+        <label for="min-max-interval">MinMax Interval:</label>
+        <input type="text" id="min-max-interval" value="0.5">
+
+    </div>
+
+    <div class="strategy-box">
+        <h4>Buy Dip Strategy</h4>
+        <div class="form-group">
+            <label for="buydip_shcode">상품코드:</label>
+            <input type="text" id="buydip_shcode" value="">
+        </div>
+        <div class="form-group">
+            <label for="buydip_period">관찰기간(분):</label>
+            <input type="number" id="buydip_period" value="5">
+        </div>
+        <div class="form-group">
+            <label for="buydip_threshold">매수 임계값(%)</label>
+            <input type="number" id="buydip_threshold" value="15">
+        </div>
+        <div class="form-group">
+            <label for="buydip_buffer">buydip_buffer(%)</label>
+            <input type="number" id="buydip_buffer" value="5">
+        </div>
+
+        <div class="form-group">
+            <label for="buydip_liquidation_delay">청산 지연(분):</label>
+            <input type="number" id="buydip_liquidation_delay" value="5">
+        </div>
+        <div class="form-group">
+            <label for="buydip_monitoring_duration">모니터링 기간(초):</label>
+            <input type="number" id="buydip_monitoring_duration" value="30">
+        </div>
+        <div class="form-group">
+            <label for="buydip_interval">실행 간격(분):</label>
+            <input type="number" id="buydip_interval" value="1">
+        </div>
+        <button id="start_strategy_buydip" class="strategy-button">Start Buy Dip</button>
+        <div id="buydip_result" class="strategy-result"></div>
+    </div>
+
+    <!-- Sell Dip Strategy -->
+    <div class="strategy-box">
+        <h4>Sell Dip Strategy</h4>
+        <div class="form-group">
+            <label for="selldip_shcode">상품코드:</label>
+            <input type="text" id="selldip_shcode" value="">
+        </div>
+        <div class="form-group">
+            <label for="selldip_period">관찰기간(분):</label>
+            <input type="number" id="selldip_period" value="5">
+        </div>
+        <div class="form-group">
+            <label for="selldip_threshold">매도 임계값(%):</label>
+            <input type="number" id="selldip_threshold" value="15">
+        </div>
+        <div class="form-group">
+            <label for="selldip_buffer">selldip_buffer(%):</label>
+            <input type="number" id="selldip_buffer" value="5">
+        </div>
+        <div class="form-group">
+            <label for="selldip_liquidation_delay">청산 지연(분):</label>
+            <input type="number" id="selldip_liquidation_delay" value="5">
+        </div>
+        <div class="form-group">
+            <label for="selldip_monitoring_duration">모니터링 기간(초):</label>
+            <input type="number" id="selldip_monitoring_duration" value="30">
+        </div>
+        <div class="form-group">
+            <label for="selldip_interval">실행 간격(분):</label>
+            <input type="number" id="selldip_interval" value="1">
+        </div>
+        <button id="start_strategy_selldip" class="strategy-button">Start Sell Dip</button>
+        <div id="selldip_result" class="strategy-result"></div>
+    </div>
+
+    <!-- Buy Peak Strategy -->
+    <div class="strategy-box">
+        <h4>Buy Peak Strategy</h4>
+        <div class="form-group">
+            <label for="buypeak_shcode">상품코드:</label>
+            <input type="text" id="buypeak_shcode" value="105V9000">
+        </div>
+        <div class="form-group">
+            <label for="buypeak_period">관찰기간(분):</label>
+            <input type="number" id="buypeak_period" value="5">
+        </div>
+        <div class="form-group">
+            <label for="buypeak_threshold">매수 임계값(%):</label>
+            <input type="number" id="buypeak_threshold" value="15">
+        </div>
+        <div class="form-group">
+            <label for="buypeak_buffer">buypeak_buffer(%):</label>
+            <input type="number" id="buypeak_buffer" value="5">
+        </div>
+        <div class="form-group">
+            <label for="buypeak_liquidation_delay">청산 지연(분):</label>
+            <input type="number" id="buypeak_liquidation_delay" value="5">
+        </div>
+        <div class="form-group">
+            <label for="buypeak_monitoring_duration">모니터링 기간(초):</label>
+            <input type="number" id="buypeak_monitoring_duration" value="30">
+        </div>
+        <div class="form-group">
+            <label for="buypeak_interval">실행 간격(분):</label>
+            <input type="number" id="buypeak_interval" value="1">
+        </div>
+        <button id="start_strategy_buypeak" class="strategy-button">Start Buy Peak</button>
+        <div id="buypeak_result" class="strategy-result"></div>
+    </div>
+
+    <!-- Sell Peak Strategy -->
+    <div class="strategy-box">
+        <h4>Sell Peak Strategy</h4>
+        <div class="form-group">
+            <label for="sellpeak_shcode">상품코드:</label>
+            <input type="text" id="sellpeak_shcode" value="105V9000">
+        </div>
+        <div class="form-group">
+            <label for="sellpeak_period">관찰기간(분):</label>
+            <input type="number" id="sellpeak_period" value="5">
+        </div>
+        <div class="form-group">
+            <label for="sellpeak_threshold">매도 임계값(%):</label>
+            <input type="number" id="sellpeak_threshold" value="15">
+        </div>
+        <div class="form-group">
+            <label for="sellpeak_buffer">sellpeak_buffer(%):</label>
+            <input type="number" id="sellpeak_buffer" value="5">
+        </div>
+        <div class="form-group">
+            <label for="sellpeak_liquidation_delay">청산 지연(분):</label>
+            <input type="number" id="sellpeak_liquidation_delay" value="5">
+        </div>
+        <div class="form-group">
+            <label for="sellpeak_monitoring_duration">모니터링 기간(초):</label>
+            <input type="number" id="sellpeak_monitoring_duration" value="30">
+        </div>
+        <div class="form-group">
+            <label for="sellpeak_interval">실행 간격(분):</label>
+            <input type="number" id="sellpeak_interval" value="1">
+        </div>
+        <button id="start_strategy_sellpeak" class="strategy-button">Start Sell Peak</button>
+        <div id="sellpeak_result" class="strategy-result"></div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'order/js/order.js'%}?v=91"></script>
+{% endblock %}

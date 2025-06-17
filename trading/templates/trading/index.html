@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title%}
+Implied volatility
+{%endblock%}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'trading/css/styles.css'%}"><!-- TODO url패턴을 활용할것 -->
+{% endblock%}
+
+{% block content %}
+{% csrf_token %}
+<h4>Implied volatility</h4>
+<button id="init_button">Init</button><br /><br />
+<label for="fut_code_select">Futures Name </label>
+<select id="fut_code_select"></select>
+<label for="maturity">Maturity:</label>
+<input type="text" id="maturity" name="maturity" value="" /><br /><br />
+<label for="fut_code">Futures Code </label>
+<input type="text" id="fut_code" name="fut_code" value="" /><br /><br />
+<label for="cd_rate">CD Rate:</label>
+<input type="text" id="cd_rate" name="cd_rate" /><br /><br />
+<button id="impvol">calc current vol</button>
+<button id="calc_vol_continue">calc vol continuously</button>
+<br />
+<button id="historic_data">historic vol</button>
+
+<div id="result"></div>
+<h1></h1>
+<button id="load_graph">Load Graph</button>
+<label for="vol_threshold">vol_threshold:</label>
+<input type="text" id="vol_threshold" name="vol_threshold" value="0.25" style="width: 50px; text-align: right;" />
+<label for=" vol_threshold%">%</label>
+
+<br />
+<img id="volGraph" src="" alt="Volatility Graph will appear here." />
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'trading/js/trading.js' %}?v=58"></script>
+{% endblock %}
+
+</html>

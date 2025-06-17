@@ -1,0 +1,18 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const futuresPriceLink = document.querySelector('a[href*="futures_price"]');
+        if (futuresPriceLink) {
+            futuresPriceLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                fetch('/trading/start_collection/', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'started') {
+                            window.open(this.href, '_blank');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        }
+    });
+</script>
